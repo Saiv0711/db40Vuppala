@@ -1,10 +1,20 @@
 var water = require('../models/water');
 // List of all waters
 
+
+
+
 // for a specific water.
-exports.water_detail = function(req, res) {
-res.send('NOT IMPLEMENTED: water detail: ' + req.params.id);
-};
+exports.water_detail = async function(req, res) { 
+    console.log("detail"  + req.params.id) 
+    try { 
+        result = await water.findById( req.params.id) 
+        res.send(result) 
+    } catch (error) { 
+        res.status(500) 
+        res.send(`{"error": document for id ${req.params.id} not found`); 
+    } 
+}; 
 // Handle water create on POST.
 
 // Handle water delete form on DELETE.
@@ -12,12 +22,28 @@ exports.water_delete = function(req, res) {
 res.send('NOT IMPLEMENTED: water delete DELETE ' + req.params.id);
 };
 // Handle water update form on PUT.
-exports.water_update_put = function(req, res) {
-res.send('NOT IMPLEMENTED: water update PUT' + req.params.id);
+exports.water_update_put =  async function(req, res) { 
+    console.log(`update on id ${req.params.id} with body 
+${JSON.stringify(req.body)}`) 
+    try { 
+        let toUpdate = await water.findById( req.params.id) 
+        // Do updates of properties 
+        if(req.body.types)  
+               toUpdate.types = req.body.types; 
+        if(req.body.cost) toUpdate.cost = req.body.cost; 
+        if(req.body.capacity) toUpdate.capacity = req.body.capacity; 
+        let result = await toUpdate.save(); 
+        console.log("Sucess " + result) 
+        res.send(result) 
+    } catch (err) { 
+        res.status(500) 
+        res.send(`{"error": ${err}: Update for id ${req.params.id} 
+failed`); 
+    } 
 };
 
 // List of all waters
-exports.water_list = async function(req, res) {
+exports.water_list = async function(_req, res) {
     try{
     thewaters = await water.find();
     res.send(thewaters);
@@ -49,7 +75,7 @@ exports.water_create_post = async function(req, res) {
     };
     // VIEWS
 // Handle a show all view
-exports.water_view_all_Page = async function(req, res) {
+exports.water_view_all_Page = async function(_req, res) {
     try{
     thewaters = await water.find();
     res.render('water', { title: 'water Search Results', results: thewaters });
@@ -59,3 +85,84 @@ exports.water_view_all_Page = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }
     };
+
+    // for a specific water. 
+exports.water_detail = async function(req, res) { 
+    console.log("detail"  + req.params.id) 
+    try { 
+        result = await water.findById( req.params.id) 
+        res.send(result) 
+    } catch (error) { 
+        res.status(500) 
+        res.send(`{"error": document for id ${req.params.id} not found`); 
+    } 
+}; 
+
+// Handle water delete on DELETE. 
+exports.water_delete = async function(req, res) { 
+    console.log("delete "  + req.params.id) 
+    try { 
+        result = await water.findByIdAndDelete( req.params.id) 
+        console.log("Removed " + result) 
+        res.send(result) 
+    } catch (err) { 
+        res.status(500) 
+        res.send(`{"error": Error deleting ${err}}`); 
+    } 
+}; 
+
+ // Handle a show one view with id specified by query 
+ exports.water_view_one_Page = async function(req, res) { 
+    console.log("single view for id "  + req.query.id) 
+    try{ 
+        result = await water.findById( req.query.id) 
+        res.render('waterdetail',  
+{ title: 'water Detail', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+ 
+// Handle building the view for creating a water. 
+// No body, no in path parameter, no query. 
+// Does not need to be async 
+exports.water_create_Page =  function(req, res) { 
+    console.log("create view") 
+    try{ 
+        res.render('watercreate', { title: 'water Create'}); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+// Handle building the view for updating a water. 
+// query provides the id 
+exports.water_update_Page =  async function(req, res) { 
+    console.log("update view for item "+req.query.id) 
+    try{ 
+        let result = await water.findById(req.query.id) 
+        res.render('waterupdate', { title: 'water Update', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+// Handle a delete one view with id from query 
+exports.water_delete_Page = async function(req, res) { 
+    console.log("Delete view for id "  + req.query.id) 
+    try{ 
+        result = await water.findById(req.query.id) 
+        res.render('waterdelete', { title: 'water Delete', toShow: 
+result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 

@@ -1,0 +1,36 @@
+extends layout 
+ 
+block content 
+  h1= title 
+ 
+  form(id='waterForm', action="/resource/resource/waters", method="POST") 
+    div.form-group 
+        label.waterAttr(for='types') water type 
+        input#water_type(type='text', name='types') 
+    div.form-group 
+        label.waterAttr(for='capacity') water capacity 
+        input#size(type='text', name='capacity') 
+    div.form-group 
+        label.waterAttr(for='cost') water cost 
+        input#cost(type='number', name='cost') 
+    
+    input(type="submit") 
+ 
+  
+  script. 
+
+    document.forms['waterForm'].addEventListener('submit', (event) => { event.preventDefault(); 
+      // TODO do something here to show user that form is being submitted 
+      fetch(event.target.action, { 
+        method:'POST', 
+        body:new URLSearchParams(new FormData(event.target)) 
+      }).then((resp) => { 
+        return resp.text(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Save succeded") 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Save failed " + error ) 
+      }); 
+    }); 

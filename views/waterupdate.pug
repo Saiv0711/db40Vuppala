@@ -1,0 +1,54 @@
+extends layout 
+ 
+block content 
+  h1= title 
+ 
+  - let waterid = toShow._id 
+  - let water_type = toShow.types 
+  - let watercapacity = toShow.capacity 
+  - let watercost = toShow.cost  
+   
+  div.row(class='mb-2') 
+    div.mr-1 ID is 
+    div #{waterid} 
+  - let actionid = "/resource/resorce/waters/" + waterid 
+  form(id='waterForm', action= actionid, method="PUT") 
+    div.form-group 
+        label.waterAttr(for='types') water type 
+        input#water_type(type='text', name='types', value= water_type ) 
+    div.form-group 
+        label.waterAttr(for='capacity') water size 
+        input#capacity(type='text', name='capacity', value= watercapacity ) 
+    div.form-group 
+        label.waterAttr(for='cost') water cost 
+        input#cost(type='number', name='cost', value= watercost ) 
+   
+   
+    button(class="btn btn-danger m-2" onclick="updateOnid()") update 
+    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
+
+  script. 
+    function cancel() { 
+      // Go back to the home page for the watch collection 
+      window.location.href='/water'
+ 
+  
+  script. 
+   function updateOnid() { 
+    document.forms['waterForm'].addEventListener('submit', (event) => { 
+      event.preventDefault(); 
+      // TODO do something here to show user that form is being submitted 
+      fetch(event.target.action, { 
+        method: 'PUT', 
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form 
+      }).then((resp) => { 
+        return resp.text(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Update succeded") 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Update failed " + error ) 
+      }); 
+    }); 
+   }

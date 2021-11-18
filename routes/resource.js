@@ -19,8 +19,7 @@ router.post('/resource/waters', water_controller.water_create_post);
 router.delete('/resource/waters/:id', water_controller.water_delete); 
  
 // PUT request to update water. 
-router.put('/resource/waters/:id', 
-water_controller.water_update_put); 
+router.put('/resource/waters/:id', water_controller.water_update_put); 
  
 // GET request for one water. 
 router.get('/resource/waters/:id', water_controller.water_detail); 

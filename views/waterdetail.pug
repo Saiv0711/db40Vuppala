@@ -1,0 +1,36 @@
+extends layout 
+ 
+block content 
+  h1= title 
+ 
+  - let waterid = toShow._id 
+  - let water_type = toShow.types 
+  - let watercapacity = toShow.capacity 
+  - let watercost = toShow.cost 
+  div 
+    div.row 
+      div(class='waterAttr mr-3') water ID is: 
+      div #{waterid} 
+    div.row 
+      div(class='waterAttr mr-3') water Type is: 
+      div #{water_type} 
+    div.row 
+      div(class='waterAttr mr-3') water Size is: 
+      div #{watercapacity} 
+    div.row 
+      div(class='waterAttr mr-3') water Cost is: 
+      div #{watercost} 
+
+    button(class="btn btn-danger m-2" onclick="gobackOnid()") goback 
+    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
+
+  script. 
+    function cancel() { 
+      // Go back to the home page for the watch collection 
+      window.location.href='/water'
+    }
+
+  script. 
+   function gobackOnid() { 
+     window.location.href='/water'
+   }
