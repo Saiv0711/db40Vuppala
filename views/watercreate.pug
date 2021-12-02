@@ -12,8 +12,10 @@ block content
         input#size(type='text', name='capacity') 
     div.form-group 
         label.waterAttr(for='cost') water cost 
-        input#cost(type='number', name='cost') 
-    
+        input#cost(type='number', name='cost')
+    div.form-group 
+        label.waterAttr(for='bottle') water bottle 
+        input#cost(type='number', name='bottle', min=2, max=5)
     input(type="submit") 
  
   

@@ -2,26 +2,21 @@ extends layout
 
 block content
   h1= title
-   - let water=results 
-  div(class="container-fluid")
-    div(class="row m-1")
-      each result,index in results
-       
-       - let destination = `dispatch(\"/water/update?id=${result._id}\")` 
-        div(class = "col-sm-2" id=index onclick=`buy(${index})`) 
-            p #{result.types} 
-            p #{result.capacity}
-            p #{result.cost}
+  - let createView = `dispatch(\"water/create\")`
+  button.btn(class="btn-primary m1-2", onclick=createView) Create
+  - let results = thewaters
+  div(class="container-fuild")
+    div(class="row")
+      each item in results
+       - let updateView = `dispatch(\"/water/update?id=${item._id}\")`
+       - let detailView = `dispatch(\"/water/detail?id=${item._id}\")`
+       - let deleteView = `dispatch(\"/water/delete?id=${item._id}\")`
+        div(class="row-sm-2", class="m-1") Item is #{item.itemname} with price is #{item.price} and quantity is #{item.quantity} </br>
+         button.btn(class="btn-primary ml-2", onclick= updateView) Update
+         button.btn(class="btn-primary ml-2", onclick= detailView) Detail
+         button.btn(class="btn-danger ml-2", onclick= deleteView) Delete
 
-              button.btn( class="btn-primary ml-1", onclick= destination) Update 
-   
-      
-    script. 
-     function dispatch(path){ 
-      window.location.href=path 
-     } 
-
-
-
-
-      
+  script.
+    function dispatch(path){
+      window.location.href=path
+    }
